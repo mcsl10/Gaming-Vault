@@ -4,6 +4,9 @@ import gamingimg from "../images/gamingimg.png";
 import gamerimg from "../images/gamerimg.png";
 
 const NavBar = () => {
+  
+
+
   return (
     <StyledNav>
       <ContainerForImg>
@@ -14,13 +17,17 @@ const NavBar = () => {
           Explore
         </StyledNavLink>
         <StyledNavLink end to="/in-progress">
-          In-Progress
+          In Progress
         </StyledNavLink>
         <StyledNavLink end to="/completed">
           Completed
         </StyledNavLink>
       </ContainerForLinks>
       {/* Add an interested section */}
+      <SearchForm>
+        <SearchBar type="text" placeholder="Search..." ></SearchBar>
+        <SearchButton type="submit">Go</SearchButton>
+      </SearchForm>
     </StyledNav>
   );
 };
@@ -32,6 +39,8 @@ const StyledNav = styled.nav`
   justify-content: space-between;
   align-items: center;
   padding: 0 0.3rem;
+  border-bottom: 3px solid chartreuse;
+  z-index: 1000;
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -77,5 +86,17 @@ const ContainerForImg = styled.div`
   display: flex;
   justify-content: flex-start;
 `;
+
+const SearchForm = styled.form`
+
+`
+
+const SearchBar = styled.input`
+
+`
+
+const SearchButton = styled.button`
+
+`
 
 export default NavBar;
