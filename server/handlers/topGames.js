@@ -1,47 +1,50 @@
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
-const { MONGO_URI, CLIENT_ID, ACCESS_TOKEN} = process.env;
+const { MONGO_URI, CLIENT_ID, ACCESS_TOKEN } = process.env;
 
-const axios = require("axios") //Make API request to IGDB
+const axios = require("axios"); //Make API request to IGDB
 
-const topGames = async () => {
-    const client = new MongoClient(MONGO_URI)
+const topGames = async (req, res) => {
+  const client = new MongoClient(MONGO_URI);
 
-    try {
+  try {
+    await client.connect()
 
     //Fetch top games from API
-const response = await axios({
-    url: "https://api.igdb.com/v4/games",
-    method: "POST",
-    headers: {
-        'Client-ID': CLIENT_ID,
-        'Authorization': `Bearer ${ACCESS_TOKEN}`,
-        'Content-Type': 'text/plain',
-    },
-    data: `fields name, total_rating, platforms.name, first_release_date, cover.url ; 
-    where total_rating != null;
-    limit 10; sort total_rating desc;`
-});
+    const response = await axios({
+      url: "https://api.igdb.com/v4/games",
+      method: "POST",
+      headers: {
+        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        "Content-Type": "text/plain",
+      },
+      data: `fields name, total_rating, platforms.name, first_release_date, cover.url ; 
+    where total_rating != null & first_release_date != null;
+    limit 300; sort total_rating desc;`,
+    });
 
-// console.log("Full API OBJECT", response);
-console.log("API response: ", response.data);
+    // console.log("Full API OBJECT", response);
+    console.log("API response: ", response.data);
 
-const games = response.data
-//Return the top games
-return games
+    const games = response.data;
 
-    } catch (error) {
-        console.error("Error fetching games:", error.message)
-        throw new Error('Error fetching games from IGDB API');
-
-    } finally {
-        await client.close()
-        console.log("Disconnected")
+    //Send the top games as a response
+    if (!games || games.length === 0) {
+      res.status(404).json({ status: 404, message: "No top-rated games found" });
+    } else {
+      res.status(200).json({ status: 200, games });
     }
-}
 
-topGames()
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "Error fetching games" });
+  } finally {
+    await client.close();
+    console.log("Disconnected");
+  }
+};
 
 module.exports = {
-    topGames,
-}
+  topGames,
+};
