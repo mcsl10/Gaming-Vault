@@ -20,6 +20,7 @@ import NavBar from "./Navbar";
 
 import SignUp from "./SignUp";
 import LogIn from "./LogIn";
+import SpecificGame from "./SpecificGame";
 
 const App = () => {
   return (
@@ -40,10 +41,12 @@ const App = () => {
         <Route path="/interested" element={<Interested />} />
         {/* Route to display all games (Top 500 or Latest 500) */}
         <Route path="/explore" element={<ExploreGames />} />
+        {/* Route to specific Game */}
+        <Route path="/game/:id" element={<SpecificGame />} />
         {/* Route to display User's in-progress games */}
-        <Route path="/in-progress" element={<h1>In Progress</h1>} />
+        <Route path="/in-progress" element={<InProgressGames />} />
         {/* Route to display User's completed games */}
-        <Route path="/completed" element={<h1>Completed Games</h1>} />
+        <Route path="/completed" element={<CompletedGames />} />
         {/* Route for non-existing url */}
         <Route path="/*" element={<h1>This page does not exist</h1>} />
       </Switch>
