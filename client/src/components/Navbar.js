@@ -1,7 +1,13 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import gamingimg from "../images/gamingimg.png";
 import gamerimg from "../images/gamerimg.png";
+
+//React Icons
+import { IoGameControllerOutline } from "react-icons/io5";
+import { MdOutlineExplore } from "react-icons/md";
+import { GiTrophyCup } from "react-icons/gi";
+import { BsHourglassSplit } from "react-icons/bs";
+import { TbDeviceDesktopHeart } from "react-icons/tb"
 
 const NavBar = () => {
   
@@ -14,20 +20,21 @@ const NavBar = () => {
       </ContainerForImg>
       <ContainerForLinks>
         <StyledNavLink end to="/explore">
-          Explore
+          Explore <MdOutlineExplore />
+        </StyledNavLink>
+        <StyledNavLink end to="/search">
+          Search <IoGameControllerOutline />
+        </StyledNavLink>
+        <StyledNavLink end to="/interested">
+          Interested <TbDeviceDesktopHeart />
         </StyledNavLink>
         <StyledNavLink end to="/in-progress">
-          In Progress
+          In Progress <BsHourglassSplit />
         </StyledNavLink>
         <StyledNavLink end to="/completed">
-          Completed
+          Completed <GiTrophyCup />
         </StyledNavLink>
       </ContainerForLinks>
-      {/* Add an interested section */}
-      <SearchForm>
-        <SearchBar type="text" placeholder="Search..." ></SearchBar>
-        <SearchButton type="submit">Go</SearchButton>
-      </SearchForm>
     </StyledNav>
   );
 };
@@ -87,16 +94,5 @@ const ContainerForImg = styled.div`
   justify-content: flex-start;
 `;
 
-const SearchForm = styled.form`
-
-`
-
-const SearchBar = styled.input`
-
-`
-
-const SearchButton = styled.button`
-
-`
 
 export default NavBar;
