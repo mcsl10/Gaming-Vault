@@ -18,7 +18,8 @@ body {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    font-family: 'Poppins', sans-serif;
+    background-color: aquamarine;
+    font-family: "Poppins", sans-serif;
     color: mintcream;
 }
 `;
