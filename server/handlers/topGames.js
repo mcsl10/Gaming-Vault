@@ -20,7 +20,7 @@ const topGames = async (req, res) => {
         "Content-Type": "text/plain",
       },
       data: `fields name, total_rating, platforms.name, first_release_date, cover.url ; 
-    where total_rating != null & first_release_date != null;
+    where total_rating < 100 & total_rating <= 99.5 & first_release_date != null;
     limit 300; sort total_rating desc;`,
     });
 
