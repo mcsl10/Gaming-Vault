@@ -2,7 +2,6 @@ const { MongoClient } = require("mongodb");
 require("dotenv").config();
 const { MONGO_URI } = process.env;
 
-
 const logIn = async (req,res) => {
     const client = new MongoClient(MONGO_URI)
 
@@ -18,7 +17,10 @@ const logIn = async (req,res) => {
         if (!user) {
             return res.status(400).json({status: 400, message: "Invalid credentials"})
         } else {
-            return res.status(200).json({message: "Logged in"})
+            return res.status(200).json({
+                message: "Logged in",
+                user: {id: user._id, email: user.email} // Return existing user ID and email from DB
+            })
         }
 
     } catch (error) {

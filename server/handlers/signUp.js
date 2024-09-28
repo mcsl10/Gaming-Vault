@@ -1,7 +1,6 @@
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
 const { MONGO_URI } = process.env;
-console.log(MONGO_URI);
 
 const signUp = async (req, res) => {
     const client = new MongoClient(MONGO_URI)
@@ -18,9 +17,19 @@ const signUp = async (req, res) => {
             return res.status(400).json({message: "User already exists"})
         }
 
+        //Convert password to a string
+        const passwordAsString = String(password)
+
         //Insert new user into collection
-        await db.collection("users").insertOne({email, password})
-        res.status(201).json({message: "User registered successfully"})
+        const result = await db.collection("users").insertOne({email, password: passwordAsString})
+
+        // Get the inserted user ID
+        const newUserId = result.insertedId;
+
+        return res.status(201).json({
+            message: "User registered successfully",
+            user: {id: newUserId, email: email} //New user just created
+        })
  
     } catch (error) {
         console.error(error)
