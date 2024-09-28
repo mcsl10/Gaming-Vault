@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -6,7 +7,7 @@ import axios from "axios";
 import { MdOutlineSearch } from "react-icons/md";
 import { BallTriangle } from "react-loading-icons";
 
-const SearchGames = () => {
+const SearchGames = ({user}) => {
   //Store user input and search results
   const [query, setQuery] = useState(""); //State to store the query
   const [games, setGames] = useState([]); //State to store games
@@ -69,13 +70,18 @@ const SearchGames = () => {
       {!loading && games.length > 0 && (
         <GameList>
           {games.map((game) => (
+            <StyledLink to={`/game/${game.id}`} key={game.id}>
             <GameItem key={game.id}>
               <GameTitle>{game.name}</GameTitle>
-              <GameImage src={game.cover?.url} alt={"Game Cover is missing"} />
+              <GameImage src={game.cover?.url} alt={"Game Cover is not available"} />
               <GamePlatforms>
                 {game.platforms?.map((platform) => platform.name).join(", ")}
               </GamePlatforms>
+              <GameDetails>
+                  <p>Release Date: {new Date(game.first_release_date * 1000).toDateString()}</p>
+                  </GameDetails>
             </GameItem>
+            </StyledLink>
           ))}
         </GameList>
       )}
@@ -93,7 +99,7 @@ const Title = styled.h1`
   font-size: 2.5rem;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
-  //Figure out color
+  color: lightgray; 
 `;
 
 const SearchBar = styled.div`
@@ -154,6 +160,7 @@ const GameItem = styled.div`
   border-radius: 8px;
   padding: 15px;
   width: 30rem;
+  height: 18rem;
   background-color: black;
   transition: font-size 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
   opacity: 0.96;
@@ -181,5 +188,17 @@ const GamePlatforms = styled.p`
   margin-top: 0.5rem;
   text-align: center;
 `;
+
+const GameDetails = styled.div`
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: lightgray;
+`;
+
+const StyledLink = styled(Link)`
+text-decoration: none;
+color: inherit;
+`
 
 export default SearchGames;
