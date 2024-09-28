@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { BallTriangle } from "react-loading-icons";
 
 const ExploreGames = () => {
@@ -56,13 +57,13 @@ const ExploreGames = () => {
       <ButtonGroup>
         <TopGamesButton
           onClick={() => setCurrentView("top")}
-          active={currentView === "top"} // Highlight if currentView is "top"
+          $activeview={currentView === "top"} // Highlight if currentView is "top"
         >
           Top Games
         </TopGamesButton>
         <LatestGamesButton
           onClick={() => setCurrentView("latest")}
-          active={currentView === "latest"} // Highlight if currentView is "latest"
+          $activeview={currentView === "latest"} // Highlight if currentView is "latest"
         >
           New Games
         </LatestGamesButton>
@@ -81,23 +82,25 @@ const ExploreGames = () => {
             <NoResultMessage>No Games Available</NoResultMessage>
           ) : (
             games.map((game) => (
+              <StyledLink to={`/game/${game.id}`} key={game.id}>
               <GameItem key={game.id}>
                 <GameTitle>{game.name}</GameTitle>
                 <GameImage
                   src={game.cover?.url}
-                  alt={"Game Cover is missing"}
+                  alt={"Game Cover is not available"}
                 />
                 <GamePlatforms>
                   {game.platforms?.map((platform) => platform.name).join(", ")}
                 </GamePlatforms>
                 <GameDetails>
-                  <p>Current Rating: {game.total_rating}</p>
+                  <p>Current Rating: {game.total_rating || "N/A"}</p>
                   <p>
                     Release Date:{" "}
                     {new Date(game.first_release_date * 1000).toDateString()}
                   </p>
                 </GameDetails>
               </GameItem>
+              </StyledLink>
             ))
           )}
         </GameList>
@@ -117,6 +120,7 @@ const Title = styled.h1`
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   text-align: center;
+  color: lightgray;
 `;
 
 const ButtonGroup = styled.div`
@@ -128,33 +132,39 @@ const ButtonGroup = styled.div`
 
 const TopGamesButton = styled.button`
   padding: 0.8rem 1.5rem;
-  font-size: ${(props) => (props.active ? "1.3rem" : "1.2rem")}; /* Slightly bigger font when active */
-  font-weight: ${(props) => (props.active ? "700" : "600")}; /* Increase font weight when active */
+  font-size: ${(props) => (props.$activeview ? "1.3rem" : "1.2rem")}; /* Slightly bigger font when active */
+  font-weight: ${(props) => (props.$activeview ? "700" : "600")}; /* Increase font weight when active */
   border-radius: 5px;
-  border: ${(props) => (props.active ? "3px solid mediumslateblue" : "none")}; /* Active border */
-  transform: ${(props) => (props.active ? "scale(1.07)" : "scale(1)")}; /* Increase size slightly when active */
+  border: ${(props) => (props.$activeview ? "none" : " 3px solid mediumspringgreen")}; /* Active border */
+  color: ${(props) => (props.$activeview ? "black" : "mediumspringgreen")};
+  transform: ${(props) => (props.$activeview ? "scale(1.07)" : "scale(1)")}; /* Increase size slightly when active */
   cursor: pointer;
-  background-color: springgreen;
+  background-color: ${(props) => (props.$activeview ? "mediumspringgreen" : "transparent")};
   transition: opacity 0.3s ease, border 0.3s ease, transform 0.3s ease, font-size 0.3s ease, font-weight 0.3s ease;
 
   &:hover {
-    opacity: 0.7;
+    /* opacity: 0.7; */
+    background-color: mediumspringgreen;
+    color: black;
   }
 `;
 
 const LatestGamesButton = styled.button`
   padding: 0.8rem 1.5rem;
-  font-size: ${(props) => (props.active ? "1.3rem" : "1.2rem")}; /* Slightly bigger font when active */
-  font-weight: ${(props) => (props.active ? "700" : "600")}; /* Increase font weight when active */
+  font-size: ${(props) => (props.$activeview ? "1.3rem" : "1.2rem")}; /* Slightly bigger font when active */
+  font-weight: ${(props) => (props.$activeview ? "700" : "600")}; /* Increase font weight when active */
   border-radius: 5px;
-  border: ${(props) => (props.active ? "3px solid mediumslateblue" : "none")}; /* Active border */
-  transform: ${(props) => (props.active ? "scale(1.07)" : "scale(1)")}; /* Increase size slightly when active */
+  border: ${(props) => (props.$activeview ? "none" : "3px solid aquamarine")}; /* Active border */
+  color: ${(props) => (props.$activeview ? "black" : "aquamarine")};
+  transform: ${(props) => (props.$activeview ? "scale(1.07)" : "scale(1)")}; /* Increase size slightly when active */
   cursor: pointer;
-  background-color: aquamarine;
+  background-color: ${(props) => (props.$activeview ? "aquamarine" : "transparent")};
   transition: opacity 0.3s ease, border 0.3s ease, transform 0.3s ease, font-size 0.3s ease, font-weight 0.3s ease;
 
   &:hover {
-    opacity: 0.7;
+    /* opacity: 0.7; */
+    background-color: aquamarine;
+    color: black;
   }
 `;
 
@@ -187,6 +197,7 @@ const GameItem = styled.div`
   border-radius: 8px;
   padding: 15px;
   width: 30rem;
+  height: 18rem;
   background-color: black;
   transition: font-size 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
   opacity: 0.96;
@@ -228,5 +239,10 @@ const ErrorMessage = styled.h2`
   text-align: center;
   margin-top: 3rem;
 `;
+
+const StyledLink = styled(Link)`
+text-decoration: none;
+color: inherit;
+`
 
 export default ExploreGames;
