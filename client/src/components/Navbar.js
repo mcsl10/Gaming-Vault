@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import gamerimg from "../images/gamerimg.png";
 
@@ -9,8 +10,14 @@ import { GiTrophyCup } from "react-icons/gi";
 import { BsHourglassSplit } from "react-icons/bs";
 import { TbDeviceDesktopHeart } from "react-icons/tb"
 
-const NavBar = () => {
-  
+const NavBar = ({ user, setUser }) => {
+  const navigate = useNavigate(); //Initialize navigate
+
+  const handleLogout = () => {
+    setUser(null); //Clear user
+    alert("Logged out successfully!");
+    navigate("/"); //Redirect to landing page
+  }
 
 
   return (
@@ -34,6 +41,7 @@ const NavBar = () => {
         <StyledNavLink end to="/completed">
           Completed <GiTrophyCup />
         </StyledNavLink>
+        {user && <LogoutButton onClick={handleLogout}>Logout</LogoutButton>} {/* Show Logout if user is logged in */}
       </ContainerForLinks>
     </StyledNav>
   );
@@ -94,5 +102,22 @@ const ContainerForImg = styled.div`
   justify-content: flex-start;
 `;
 
+const LogoutButton = styled.button`
+ font-size: 1rem;
+  background: transparent;
+  border: 2px solid chartreuse;
+  color: chartreuse;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  position: absolute; //Needs to be fixed to be responsive 
+  // Need the Button to be fully on the right 
+  right: 2rem;
+  top: 1.32rem;
+
+  &:hover {
+    background: chartreuse;
+    color: black;
+  } 
+`
 
 export default NavBar;
