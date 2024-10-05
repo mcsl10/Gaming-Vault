@@ -4,11 +4,14 @@ import axios from "axios";
 
 //React Icon
 import { BallTriangle } from "react-loading-icons";
+import { FaStar } from "react-icons/fa"; // Importing stars for rating
 
 const CompletedGames = ({user}) => {
   const [games, setGames] = useState([]); //Local state to store games
   const [loading, setLoading] = useState(true); //State for loading status
   const [error, setError] = useState(null); //State for error handling
+  const [ratings, setRatings] = useState({}); // State to store ratings for each game
+  const [notes, setNotes] = useState({}); //State to store notes for each game
 
   //Fetch user's completed games when the component mounts
   useEffect(() => {
@@ -33,7 +36,7 @@ const CompletedGames = ({user}) => {
       fetchCompletedGames(); //Only fetch if the user exists
     } else {
       setLoading(false); // If no user, stop loading
-      setError("User is not defined");
+      setError("Please log in");
     }
   }, [user])
 
@@ -97,6 +100,19 @@ setError("Failed to delete the game")
 }
 }
 //---------------------------------------------------------------------------------------------
+// Handler for rating a game
+const handleRating = (gameId, ratingValue) => {
+  setRatings((prevRatings) => ({
+    ...prevRatings,
+    [gameId]: ratingValue, // Store the rating for each game by its ID
+  }));
+};
+
+// Handle note change
+const handleNoteChange = (gameId, note) => {
+  setNotes((prevNotes) => ({ ...prevNotes, [gameId]: note }));
+};
+//---------------------------------------------------------------------------------------------
     return (
         <Container>
         <Title>Victory Vault</Title>
@@ -111,6 +127,26 @@ setError("Failed to delete the game")
                 <PlayingGameAgainButton onClick={() => handleMoveBackToInProgress(game)}>Playing Again</PlayingGameAgainButton>
                 <DeleteButton onClick={() => handleDeleteCompletedGame(game)}>Delete Game</DeleteButton>
                 </ButtonsContainer>
+                  {/* Star Rating System */}
+              <StarTitle>Give your Rating:</StarTitle>
+            <StarRatingContainer>
+              {[1, 2, 3, 4, 5].map((index) => (
+                <StarIcon
+                  key={index}
+                  filled={index <= (ratings[game.id] || 0)} // Highlight stars up to the current rating
+                  onClick={() => handleRating(game.id, index)} // Set the rating on click
+                />
+              ))}
+            </StarRatingContainer>
+                              {/* Note Section */}
+                              <NoteSection>
+              <NoteTitle>Add Notes:</NoteTitle>
+              <NoteInput
+                value={notes[game.id] || ""}
+                onChange={(e) => handleNoteChange(game.id, e.target.value)}
+                placeholder="Capture your thoughts..."
+              />
+            </NoteSection>
               </GameItem>
             ))
         )}
@@ -154,7 +190,7 @@ const GameItem = styled.div`
   border-radius: 8px;
   padding: 15px;
   width: 30rem;
-  height: 18rem;
+  height: 32rem;
   background-color: black;
   transition: font-size 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
   opacity: 0.96;
@@ -232,6 +268,58 @@ const ErrorMessage = styled.h2`
   font-size: 1.5rem;
   text-align: center;
   margin-top: 3rem;
+`;
+
+const StarRatingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px 0;
+`;
+
+const StarTitle = styled.h3`
+  color: lightgray;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  text-align: center;
+`;
+
+const StarIcon = styled(FaStar)`
+  cursor: pointer;
+  color: ${(props) => (props.filled ? "lime" : "gray")};
+  transition: color 0.2s ease-in-out;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+
+  &:hover {
+    color: lime;
+  }
+`;
+
+const NoteSection = styled.div`
+  margin-top: 0.5rem;
+  width: 100%;
+`;
+
+const NoteTitle = styled.h3`
+  color: lightgray;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+`;
+
+const NoteInput = styled.textarea`
+  width: 100%;
+  height: 5rem;
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  resize: none;
+  background-color: lightgray;
+
+  &::placeholder {
+    color: darkslategray;
+  }
 `;
 
 export default CompletedGames
