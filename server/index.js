@@ -9,7 +9,18 @@ const {signUp} = require("./handlers/signUp")
 const {topGames} = require("./handlers/topGames")
 const {latestGames} = require("./handlers/latestGames")
 const {searchGames} = require("./handlers/searchGames")
-
+const {specificGameInfo} = require("./handlers/specificGameInfo")
+const {addToInterested} = require("./handlers/addToInterested")
+const {getInterestedGames} = require("./handlers/getInterestedGames")
+const {addToInProgress} = require("./handlers/addToInProgress")
+const {getInProgressGames} = require("./handlers/getInProgressGames")
+const {getCompletedGames} = require("./handlers/getCompletedGames")
+const {moveToInProgress} = require("./handlers/moveToInProgress")
+const {moveToCompleted} = require("./handlers/moveToCompleted")
+const {moveBackToInProgress} = require("./handlers/moveBackToInProgress")
+const {deleteInterestedGame} = require("./handlers/deleteInterestedGame")
+const {deleteInProgressGame} = require("./handlers/deleteInProgressGame")
+const {deleteCompletedGame} = require("./handlers/deleteCompletedGame")
 const PORT = 8888;
 
 const app = express();
@@ -39,6 +50,25 @@ app.post("/topGames", topGames)
 // do i need the headers like in the project or no? 
 //axios or normal - ex. getcompany vs topgames?
 app.post("/searchGames", searchGames)
+// app.post(`/specificGame/${id}`, specificGameInfo)
+app.get("/game/:id", specificGameInfo);
+
+app.post("/addToInterested", addToInterested)
+app.get("/interested/:userId", getInterestedGames)
+
+app.post("/addToInProgress", addToInProgress)
+app.get("/inprogress/:userId", getInProgressGames)
+
+
+app.get("/completed/:userId", getCompletedGames)
+
+app.patch("/moveToInProgress", moveToInProgress) //Playing Now Button
+app.patch("/moveToCompleted", moveToCompleted) //Game Completed Button
+app.patch("/moveBackToInProgress", moveBackToInProgress) //Playing Again Button
+
+app.delete("/interested/:userId/:gameId", deleteInterestedGame)//Delete game in interested list
+app.delete("/inprogress/:userId/:gameId", deleteInProgressGame)//Delete game in progress list
+app.delete("/completed/:userId/:gameId", deleteCompletedGame)//Delete game in completed list
 
 app.get("/*", (req, res) => {
     res.status(404).json({status: 404, message: "This isn't the endpoint you're looking for!"})
