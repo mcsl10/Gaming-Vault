@@ -33,7 +33,7 @@ const Interested = ({ user }) => {
       fetchInterestedGames(); //Only fetch if the user and user._id exists
     } else {
       setLoading(false); // If no user, stop loading
-      setError("Please log in");
+      setError("Please log in"); //Changed "User is not defined" message when not logged in
     }
   }, [user]);
 
