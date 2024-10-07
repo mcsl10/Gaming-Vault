@@ -75,7 +75,7 @@ const SpecificGame = ({ game, setGame, addToInterested, addToInProgress, user })
 
       } else {
         console.error(data.message); // Log error message
-        alert(data.message);
+        alert("Game was already added to interested list");
       }
     } catch (error) {
       console.error("Error adding game to Interested:", error);
@@ -110,7 +110,7 @@ const SpecificGame = ({ game, setGame, addToInterested, addToInProgress, user })
 
       } else {
         console.error(data.message); // Log error message
-        alert(data.message);
+        alert("Game was already added to in progress list");
       }
     } catch (error) {
       console.error("Error adding game to In Progress:", error);
