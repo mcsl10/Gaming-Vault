@@ -129,8 +129,6 @@ Distributed under the MIT License. See LICENSE.txt for more information.
 
 **Mark Soniel-Loka** 
 
-- [Portfolio](https://mark-soniel-loka-portfolio.vercel.app)
-- [LinkedIn](https://www.linkedin.com/in/mark-soniel-loka/)
-
+[LinkedIn](https://www.linkedin.com/in/mark-soniel-loka/) | [Portfolio](https://mark-soniel-loka-portfolio.vercel.app) | marksonielloka@gmail.com
 
 
